@@ -17,11 +17,9 @@ class _LoadingScreenState extends State<LoadingScreen> {
     final response =
         await http.get(Uri.parse('https://dog.ceo/api/breeds/list/all'));
     if (response.statusCode == 200) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) {
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
         return Home();
       }));
-    } else {
-      print("not ok");
     }
   }
 

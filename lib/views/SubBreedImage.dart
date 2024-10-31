@@ -8,43 +8,47 @@ import 'dart:async';
 
 var bgcolor = const Color(0xFF000000);
 
-class Breedscreen extends StatefulWidget {
-  const Breedscreen({super.key, required this.breedforsearch});
+class Subbreedimage extends StatefulWidget {
+  const Subbreedimage(
+      {super.key, required this.mainBreed, required this.subBreed});
 
-  final String breedforsearch;
+  final String mainBreed;
+  final String subBreed;
   @override
-  State<Breedscreen> createState() => _BreedscreenState();
+  State<Subbreedimage> createState() => _SubbreedimageState();
 }
 
-class _BreedscreenState extends State<Breedscreen> {
-  List<ImageOfBreed> imageOfBreed = [];
+class _SubbreedimageState extends State<Subbreedimage> {
+  List<ImageOfBreed> imageOfSubBreed = [];
   List<ImageOfBreed> randomImage = [];
   bool _isImageVisible = false;
 
   int topContainer = 1;
   int botContainer = 10;
 
-  Future<void> _loadImage() async {
+  Future<void> _loadSubBreedImage() async {
     try {
-      imageOfBreed = await DataProvider().fetchImage(widget.breedforsearch);
+      setState(() {
+        imageOfSubBreed = [];
+      });
+      imageOfSubBreed = await DataProvider()
+          .fetchImageOfSubBreed(widget.mainBreed, widget.subBreed);
       setState(() {});
-    } catch (e) {
-    }
+    } catch (e) {}
   }
 
   Future<void> _loadRandomImage() async {
     try {
-      randomImage =
-          await DataProvider().fetchRandomImage(widget.breedforsearch);
+      randomImage = await DataProvider()
+          .fetchRandomImagOfSubBreed(widget.mainBreed, widget.subBreed);
       setState(() {});
-    } catch (e) {
-    }
+    } catch (e) {}
   }
 
   @override
   void initState() {
     super.initState();
-    _loadImage();
+    _loadSubBreedImage();
     _loadRandomImage();
   }
 
@@ -67,7 +71,7 @@ class _BreedscreenState extends State<Breedscreen> {
         automaticallyImplyLeading: true,
         backgroundColor: bgcolor,
         title: Text(
-          widget.breedforsearch,
+          widget.subBreed,
           style: const TextStyle(color: Colors.white, fontSize: 24),
         ),
       ),
@@ -129,10 +133,10 @@ class _BreedscreenState extends State<Breedscreen> {
                     crossAxisSpacing: 4.0,
                     mainAxisSpacing: 4.0,
                   ),
-                  itemCount: imageOfBreed.length,
+                  itemCount: imageOfSubBreed.length,
                   itemBuilder: (context, index) {
                     return CardBreedImage(
-                      image: imageOfBreed[index].image,
+                      image: imageOfSubBreed[index].image,
                       custom_widget:
                           const CustomIconButton(icon: Icons.favorite),
                     );
