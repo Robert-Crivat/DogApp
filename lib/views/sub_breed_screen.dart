@@ -1,51 +1,57 @@
-import 'package:dogapp/models/imageofbreed.dart';
-import 'package:dogapp/services/api_recall.dart';
-import 'package:dogapp/views/CustomIconButton.dart';
+// ignore_for_file: empty_catches
+
+import 'package:dogapp/models/image_of_breed.dart';
+import 'package:dogapp/services/api_call.dart';
+import 'package:dogapp/themes/app_theme.dart';
+import 'package:dogapp/widgets/favorite_button.dart';
+import 'package:dogapp/widgets/button_randomImage.dart';
 import 'package:dogapp/widgets/card_breed_image.dart';
 import 'package:dogapp/widgets/card_random_image.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-var bgcolor = const Color(0xFF000000);
 
-class Breedscreen extends StatefulWidget {
-  const Breedscreen({super.key, required this.breedforsearch});
+class Subbreedimage extends StatefulWidget {
+  const Subbreedimage(
+      {super.key, required this.mainBreed, required this.subBreed});
 
-  final String breedforsearch;
+  final String mainBreed;
+  final String subBreed;
   @override
-  State<Breedscreen> createState() => _BreedscreenState();
+  State<Subbreedimage> createState() => _SubbreedimageState();
 }
 
-class _BreedscreenState extends State<Breedscreen> {
-  List<ImageOfBreed> imageOfBreed = [];
+class _SubbreedimageState extends State<Subbreedimage> {
+  List<ImageOfBreed> imageOfSubBreed = [];
   List<ImageOfBreed> randomImage = [];
   bool _isImageVisible = false;
-
   int topContainer = 1;
   int botContainer = 10;
-
-  Future<void> _loadImage() async {
-    try {
-      imageOfBreed = await DataProvider().fetchImage(widget.breedforsearch);
-      setState(() {});
-    } catch (e) {
-    }
-  }
-
-  Future<void> _loadRandomImage() async {
-    try {
-      randomImage =
-          await DataProvider().fetchRandomImage(widget.breedforsearch);
-      setState(() {});
-    } catch (e) {
-    }
-  }
 
   @override
   void initState() {
     super.initState();
-    _loadImage();
+    _loadSubBreedImage();
     _loadRandomImage();
+  }
+
+  Future<void> _loadSubBreedImage() async {
+    try {
+      setState(() {
+        imageOfSubBreed = [];
+      });
+      imageOfSubBreed = await DataProvider()
+          .fetchImageOfSubBreed(widget.mainBreed, widget.subBreed);
+      setState(() {});
+    } catch (e) {}
+  }
+
+  Future<void> _loadRandomImage() async {
+    try {
+      randomImage = await DataProvider()
+          .fetchRandomImagOfSubBreed(widget.mainBreed, widget.subBreed);
+      setState(() {});
+    } catch (e) {}
   }
 
   void _turnImageVisible() {
@@ -65,9 +71,9 @@ class _BreedscreenState extends State<Breedscreen> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        backgroundColor: bgcolor,
+        backgroundColor: AppTheme.primaryColor,
         title: Text(
-          widget.breedforsearch,
+          "${widget.mainBreed} ${widget.subBreed}",
           style: const TextStyle(color: Colors.white, fontSize: 24),
         ),
       ),
@@ -90,22 +96,8 @@ class _BreedscreenState extends State<Breedscreen> {
                         }
                       },
                       child: _isImageVisible
-                          ? Container(
-                              height: MediaQuery.of(context).size.height * 0.05,
-                              width: MediaQuery.of(context).size.width * 0.4,
-                              child: const Center(child: Text("Close")),
-                              decoration: const BoxDecoration(
-                                  color: Colors.red,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(8))))
-                          : Container(
-                              height: MediaQuery.of(context).size.height * 0.05,
-                              width: MediaQuery.of(context).size.width * 0.6,
-                              child: const Center(child: Text("Random Image")),
-                              decoration: const BoxDecoration(
-                                  color: Colors.red,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(8))))),
+                          ? const ButtonClose()
+                          : const ButtonRandomimage()),
                   if (_isImageVisible)
                     GestureDetector(
                       onTap: () {
@@ -129,13 +121,12 @@ class _BreedscreenState extends State<Breedscreen> {
                     crossAxisSpacing: 4.0,
                     mainAxisSpacing: 4.0,
                   ),
-                  itemCount: imageOfBreed.length,
+                  itemCount: imageOfSubBreed.length,
                   itemBuilder: (context, index) {
                     return CardBreedImage(
-                      image: imageOfBreed[index].image,
-                      custom_widget:
-                          const CustomIconButton(icon: Icons.favorite),
-                    );
+                            image: imageOfSubBreed[index].image,
+                            custom_widget:FavoriteButton(imagePath: imageOfSubBreed[index].image,)
+                          );
                   },
                 ),
               ))

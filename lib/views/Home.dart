@@ -1,24 +1,22 @@
-// ignore_for_file: prefer_const_constructors, prefer_is_empty, use_key_in_widget_constructors
-
+// ignore_for_file: prefer_const_constructors, prefer_is_empty, use_key_in_widget_constructors, empty_catches, library_private_types_in_public_api
 import 'dart:async';
-import 'package:dogapp/models/listofdogs.dart';
-import 'package:dogapp/services/api_recall.dart';
-import 'package:dogapp/views/BreedScreen.dart';
-import 'package:dogapp/views/favoriteScreen.dart';
-import 'package:dogapp/views/subBreedScreen.dart';
+import 'package:dogapp/models/list_of_dog.dart';
+import 'package:dogapp/services/api_call.dart';
+import 'package:dogapp/themes/app_theme.dart';
+import 'package:dogapp/utils/app_routing.dart';
+import 'package:dogapp/views/breed_screen.dart';
+import 'package:dogapp/views/favorite_screen.dart';
 import 'package:dogapp/widgets/card_listdog.dart';
 import 'package:flutter/material.dart';
-
-var bgcolor = Color(0xFF000000);
+import 'package:go_router/go_router.dart';
 
 class Home extends StatefulWidget {
-  Home();
+  const Home();
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-
   @override
   void initState() {
     super.initState();
@@ -29,9 +27,7 @@ class _HomeState extends State<Home> {
     try {
       listofDogs = await DataProvider().fetchDog();
       setState(() {});
-    } catch (e) {
-      print(e);
-    }
+    } catch (e) {}
   }
 
   @override
@@ -39,68 +35,38 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: bgcolor,
+        backgroundColor: AppTheme.primaryColor,
         title: Text(
           "Dog List App ",
           style: TextStyle(color: Colors.white, fontSize: 24),
         ),
       ),
-      body: PageView(
-        children: [
-          Column(
-            children: <Widget>[
-              Expanded(
-                child: ListView.builder(
-                  itemCount: listofDogs.length,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Breedscreen(
-                                      breedforsearch: listofDogs[index].name,
-                                    )));
-                      },
-                      child: CardListdog(breed: listofDogs[index].name),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-          Column(
-            children: <Widget>[
-              Expanded(
-                child: ListView.builder(
-                  itemCount: listofDogs.length,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SubBreedScreen(
-                                      breedforsearch: listofDogs[index].name,
-                                    )));
-                      },
-                      child: CardListdog(breed: listofDogs[index].name),
-                    );
-                  },
-                ),
-              ),
-            ],
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            child: ListView.builder(
+              itemCount: listofDogs.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () => goRouter.pushNamed(AppRoute.breed.name,
+                      extra: listofDogs[index].name),
+                  child: CardListdog(breed: listofDogs[index].name),
+                );
+              },
+            ),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => FavoriteScreen()));},
+        onPressed: () {
+          goRouter.goNamed(AppRoute.favorite.name);
+        },
         splashColor: Colors.redAccent,
         backgroundColor: const Color.fromARGB(255, 71, 69, 69),
-        child: const Icon(Icons.favorite, color: Colors.red,),
+        child: const Icon(
+          Icons.favorite,
+          color: Colors.red,
+        ),
       ),
     );
   }

@@ -4,7 +4,8 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 class Cardsubbreed extends StatelessWidget {
   String breed;
 
-  Cardsubbreed({super.key,
+  Cardsubbreed({
+    super.key,
     required this.breed,
   });
 
@@ -13,7 +14,9 @@ class Cardsubbreed extends StatelessWidget {
     return Container(
         margin: const EdgeInsets.all(8),
         height: MediaQuery.of(context).size.height * 0.065,
-        decoration: const BoxDecoration(color: Color.fromARGB(255, 36, 35, 35), borderRadius: BorderRadius.all(Radius.circular(12))),
+        decoration: const BoxDecoration(
+            color: Color.fromARGB(255, 36, 35, 35),
+            borderRadius: BorderRadius.all(Radius.circular(12))),
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: Row(

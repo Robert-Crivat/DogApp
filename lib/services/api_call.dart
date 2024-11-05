@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'package:dogapp/models/imageofbreed.dart';
+import 'package:dogapp/models/image_of_breed.dart';
 import 'package:http/http.dart' as http;
-import 'package:dogapp/models/listofdogs.dart';
+import 'package:dogapp/models/list_of_dog.dart';
 
 class DataProvider {
   //#########################################################################
@@ -41,9 +41,9 @@ class DataProvider {
       Map<String, dynamic> jsonResponse = json.decode(response.body);
       List<dynamic> subBreeds = jsonResponse['message'];
       List<ListOfDogs> listOfSubBreed = [];
-      subBreeds.forEach((subBreed) {
+      for (var subBreed in subBreeds) {
         listOfSubBreed.add(ListOfDogs(name: subBreed));
-      });
+      }
       return listOfSubBreed;
     } else {
       throw Exception("Failed to load, try again");
@@ -66,9 +66,9 @@ class DataProvider {
       // Clear the list before adding new images
       List<ImageOfBreed> imageOfBreed = []; // Create a new list
 
-      subBreeds.forEach((subBreed) {
+      for (var subBreed in subBreeds) {
         imageOfBreed.add(ImageOfBreed(image: subBreed));
-      });
+      }
       return imageOfBreed; // Return the new list
     } else {
       throw Exception("Failed to load, try again");
@@ -116,9 +116,9 @@ class DataProvider {
       Map<String, dynamic> jsonResponse = json.decode(response.body);
       List<dynamic> values = jsonResponse['message'];
       List<ImageOfBreed> imageOfBreed = [];
-      values.forEach((value) {
+      for (var value in values) {
         imageOfBreed.add(ImageOfBreed(image: value));
-      });
+      }
       return imageOfBreed;
     } else {
       throw Exception("Failed to load, try again");
