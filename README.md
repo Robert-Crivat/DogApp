@@ -18,7 +18,7 @@ Le funzionalità richieste e implementate sono le seguenti:
 - **Images list by breed and sub-breed**: Elenco di immagini per una specifica razza e sottorazza.
 - **Favorite list of breeds**: Possibilità di aggiungere e visualizzare una lista di razze preferite.
 
-  ![Richiesta del progetto](https://res.cloudinary.com/dncsxih9p/image/upload/v1730799047/DogApp/ab6x9x7c9t7uqejaew0c.png))
+  ![Richiesta del progetto](https://res.cloudinary.com/dncsxih9p/image/upload/v1730799640/DogApp/drord2xh4fhxlblyi6ig.jpg))
 
 
 ## 3. Tecnologie Utilizzate
