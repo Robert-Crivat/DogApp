@@ -18,7 +18,8 @@ Le funzionalità richieste e implementate sono le seguenti:
 - **Images list by breed and sub-breed**: Elenco di immagini per una specifica razza e sottorazza.
 - **Favorite list of breeds**: Possibilità di aggiungere e visualizzare una lista di razze preferite.
 
-_Si consiglia di aggiungere qui screenshot o GIF che mostrano le funzionalità principali._
+  ![Richiesta del progetto](https://res.cloudinary.com/dncsxih9p/image/upload/v1730799047/DogApp/ab6x9x7c9t7uqejaew0c.png))
+
 
 ## 3. Tecnologie Utilizzate
 
@@ -28,19 +29,31 @@ Il progetto è stato sviluppato principalmente con:
 - **goRouter**: Per la gestione della navigazione tra le diverse schermate dell'app.
 - **http**: Per eseguire chiamate alle API e recuperare i dati e le immagini delle razze canine.
 
-_Si può aggiungere qui un esempio di codice per le chiamate API, ad esempio:_
-
 ```dart
-import 'package:http/http.dart' as http;
+  //#########################################################################
+  // First fetch for the entire list of breeds
+  //#########################################################################
 
-Future<void> fetchDogImage() async {
-  final response = await http.get(Uri.parse('https://dog.ceo/api/breeds/image/random'));
-  if (response.statusCode == 200) {
-    // Parse and display image
-  } else {
-    // Handle error
+  Future<List<ListOfDogs>> fetchDog() async {
+    final response =
+        await http.get(Uri.parse('https://dog.ceo/api/breeds/list/all'));
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> jsonResponse = json.decode(response.body);
+      Map<String, dynamic> breeds = jsonResponse['message'];
+
+      List<ListOfDogs> listofDogs = [];
+      breeds.forEach((key, value) {
+        listofDogs.add(ListOfDogs(name: key));
+      });
+
+      return listofDogs;
+    } else {
+      throw Exception("Failed to load dogs");
+    }
   }
-}
+
+  //  End
 ```
 
 ## 4. Architettura del Progetto
@@ -107,4 +120,4 @@ In futuro, alcune funzionalità aggiuntive potrebbero migliorare l'app:
 
 ## Ringraziamenti
 
-Ringrazio l'intero team per l'opportunità di lavorare a questo progetto, che mi ha permesso di esplorare nuove librerie come goRouter e approfondire le integrazioni API. Spero che DogApp risulti utile e interessante per chi desidera esplorare il mondo delle razze canine.
+Ringrazio per l'opportunità fornita, che mi ha permesso di esplorare nuove librerie come goRouter e approfondire le integrazioni API.
